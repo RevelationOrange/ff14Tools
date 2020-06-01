@@ -45,6 +45,14 @@ def repairQuotes(x):
     return x
 
 
+def addDicts(updDict, withDict):
+    for k in withDict:
+        if k in updDict:
+            updDict[k] += withDict[k]
+        else:
+            updDict[k] = withDict[k]
+
+
 def getXPTable():
     return __xpTable
 
@@ -217,7 +225,7 @@ class craftItemManager:
                 foundids.append(i)
         return foundids
 
-    def findRecsByIngr(self, ingrName, overLvl=0, isID=False):
+    def findRecsByIngrOld(self, ingrName, overLvl=0, isID=False):
         if isID:
             ingrID = ingrName
         else:
@@ -234,6 +242,24 @@ class craftItemManager:
             if self.itemDict[rid].recLvl > overLvl:
                 retRidSet.add(rid)
         return retRidSet
+
+    def findRecsByIngr(self, ingrName, overLvl=0, isID=False):
+        if isID:
+            ingrID = ingrName
+        else:
+            ingrID = self.idPicker(ingrName)
+
+        ridDict = {}
+        retRidDict = {}
+        for rid in self.itemDict:
+            for reqQ, reqID in self.itemDict[rid].reqs:
+                if reqID == ingrID:
+                    addDicts(ridDict, {rid: reqQ})
+                    addDicts(ridDict, self.findRecsByIngrBetter(rid, 0, True))
+        for rid in ridDict:
+            if self.itemDict[rid].recLvl > overLvl:
+                retRidDict[rid] = ridDict[rid]
+        return retRidDict
 
     def setup(self, rltFilePath, recsFilePath, itemsFilePath):
         rltDict = {}

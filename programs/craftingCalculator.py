@@ -47,8 +47,10 @@ def main():
             iid = cim2.idPicker(x)
             # iid = x
             rlist = cim2.findRecsByIngr(x, 50-1)
+            rdict = cim2.findRecsByIngrBetter(x, 50-1)
+            # rdict = {}
             # rlist = cim2.findRecsByIngr(iid, 50-1, True)
-            print(x, len(rlist))
+            print(x, len(rlist), len(rdict.keys()))
             for rid in rlist:
                 fcSet.add(rid)
                 rlvl = cim2.itemDict[rid].recLvl
