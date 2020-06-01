@@ -237,7 +237,7 @@ class craftItemManager:
             for reqQ, reqID in self.itemDict[rid].reqs:
                 if reqID == ingrID:
                     ridSet.add(rid)
-                    ridSet = ridSet.union(self.findRecsByIngr(rid, 0, True))
+                    ridSet = ridSet.union(self.findRecsByIngrOld(rid, 0, True))
         for rid in ridSet:
             if self.itemDict[rid].recLvl > overLvl:
                 retRidSet.add(rid)
@@ -255,7 +255,7 @@ class craftItemManager:
             for reqQ, reqID in self.itemDict[rid].reqs:
                 if reqID == ingrID:
                     addDicts(ridDict, {rid: reqQ})
-                    addDicts(ridDict, self.findRecsByIngrBetter(rid, 0, True))
+                    addDicts(ridDict, self.findRecsByIngr(rid, 0, True))
         for rid in ridDict:
             if self.itemDict[rid].recLvl > overLvl:
                 retRidDict[rid] = ridDict[rid]
